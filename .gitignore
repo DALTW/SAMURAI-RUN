@@ -24,3 +24,6 @@ Thumbs.db
 # Unity crash reports
 sysinfo.txt
 *.stackdump
+
+# Debug logs
+diag_log.txt
