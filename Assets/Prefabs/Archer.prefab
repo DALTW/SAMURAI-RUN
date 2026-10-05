@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 2734723513002205141}
   - component: {fileID: 7044086584385381641}
   - component: {fileID: 6714082847238886273}
+  - component: {fileID: 5000000000000000001}
+  - component: {fileID: 1257997665187710057}
   m_Layer: 11
   m_Name: Archer
   m_TagString: Untagged
@@ -38,7 +40,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4733824370930359637
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -85,7 +87,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 7ba8d9ad83ad4f64581394d523ab12d9, type: 3}
+  m_Sprite: {fileID: 3847604794099920046, guid: 60bb62aafd6f1b0d3b700b813d18f58b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -95,6 +97,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!61 &8594336744154720605
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -129,17 +132,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.453125}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8125, y: 0.90625}
+    pivot: {x: 0.671875, y: 0}
+    oldSize: {x: 2, y: 1.5}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.4875, y: 0.8609375}
+  m_Size: {x: 0.375, y: 0.90625}
   m_EdgeRadius: 0
 --- !u!114 &2734723513002205141
 MonoBehaviour:
@@ -183,7 +186,68 @@ MonoBehaviour:
   fireInterval: 1.7
   firstShotDelay: 0.35
   detectRange: 13
-  firePointOffset: {x: -0.5, y: 0.05}
+  firePointOffset: {x: -0.78, y: 0.625}
   aimAtPlayer: 0
   aimOffset: {x: 0, y: -0.5}
+  animator: {fileID: 5000000000000000001}
+  idleClip: IDLE
+  attackClip: ATTACK
+  releaseFrame: 4
+  deathClip: DEATH
   deathEffectPrefab: {fileID: 8126595134391185482, guid: 22ee6cc314745b64ab99036db8184054, type: 3}
+--- !u!114 &5000000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7994265893126446987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 101bf64654d8bfd40a9c338b6582f465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SamuraiRunner.Common.SpriteSheetAnimator
+  clips:
+  - clipName: IDLE
+    frames:
+    - {fileID: 3847604794099920046, guid: 60bb62aafd6f1b0d3b700b813d18f58b, type: 3}
+    - {fileID: 9094185390886369245, guid: 60bb62aafd6f1b0d3b700b813d18f58b, type: 3}
+    - {fileID: 840349328435729844, guid: 60bb62aafd6f1b0d3b700b813d18f58b, type: 3}
+    - {fileID: 2183951295506313047, guid: 60bb62aafd6f1b0d3b700b813d18f58b, type: 3}
+    framesPerSecond: 6
+    loop: 1
+  - clipName: ATTACK
+    frames:
+    - {fileID: 1501605104426024629, guid: 8d758b04c4f94f7c9935ca8a822a1f6e, type: 3}
+    - {fileID: 2916527834651520203, guid: 8d758b04c4f94f7c9935ca8a822a1f6e, type: 3}
+    - {fileID: 3441232733524675831, guid: 8d758b04c4f94f7c9935ca8a822a1f6e, type: 3}
+    - {fileID: 6324851706892090403, guid: 8d758b04c4f94f7c9935ca8a822a1f6e, type: 3}
+    - {fileID: 6645085602998793574, guid: 8d758b04c4f94f7c9935ca8a822a1f6e, type: 3}
+    - {fileID: 7634016347249450791, guid: 8d758b04c4f94f7c9935ca8a822a1f6e, type: 3}
+    - {fileID: 1623837913205742528, guid: 8d758b04c4f94f7c9935ca8a822a1f6e, type: 3}
+    - {fileID: 5089890616286137575, guid: 8d758b04c4f94f7c9935ca8a822a1f6e, type: 3}
+    framesPerSecond: 10
+    loop: 0
+  - clipName: DEATH
+    frames:
+    - {fileID: 7477510142480185473, guid: b9ef926f2c7befae024e72b94768d15c, type: 3}
+    - {fileID: 689793071842357294, guid: b9ef926f2c7befae024e72b94768d15c, type: 3}
+    - {fileID: 5292396881100045219, guid: b9ef926f2c7befae024e72b94768d15c, type: 3}
+    - {fileID: 3852738993514790220, guid: b9ef926f2c7befae024e72b94768d15c, type: 3}
+    framesPerSecond: 8
+    loop: 0
+--- !u!114 &1257997665187710057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7994265893126446987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07b57f9af0de42d884b8ebb514547213, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SamuraiRunner.Items.LootDropper
+  dropPrefab: {fileID: 4415283747381328492, guid: c79f45f249154437b27d49e6a5090399, type: 3}
+  dropChance: 1
+  dropOffset: {x: 0, y: 0.6}

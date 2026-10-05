@@ -28,6 +28,7 @@ namespace SamuraiRunner.EditorTools
     public static class SamuraiCombatSceneBuilder
     {
         private const string PrefabFolder = "Assets/Prefabs";
+        private const string HeartSheetPath = "Assets/Art/UI/hp_onigiri.png"; // 주먹밥 체력 아이콘 5단계
 
         [MenuItem("Tools/Samurai Runner/2단계 - 전투 요소 추가")]
         public static void BuildCombat()
@@ -274,16 +275,25 @@ namespace SamuraiRunner.EditorTools
             Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             Sprite square = SamuraiSceneBuilder.CreateSquareSprite();
 
-            // 심장 3개 (좌상단)
+            // 심장(주먹밥) 3개 (좌상단) — 원본 19x17px 도트를 2배(38x34)로, 간격 8px
+            Sprite[] onigiri = LoadHeartSprites();
+            bool hasOnigiri = onigiri.Length > 0;
+            if (!hasOnigiri)
+                Debug.LogWarning($"[SamuraiCombatSceneBuilder] 주먹밥 스프라이트가 없어 사각형으로 대체합니다: {HeartSheetPath}");
+            Vector2 heartSize = hasOnigiri ? new Vector2(38f, 34f) : new Vector2(28f, 28f);
+            float heartStride = hasOnigiri ? 46f : 38f;
+
             var heartsRoot = FindOrCreateUIChild(hudGO.transform, "Hearts",
                 new Vector2(0f, 1f), new Vector2(20f, -20f), new Vector2(150f, 40f));
             var hearts = new Image[3];
             for (int i = 0; i < hearts.Length; i++)
             {
                 var heart = FindOrCreateUIChild(heartsRoot.transform, $"Heart{i}",
-                    new Vector2(0f, 1f), new Vector2(i * 38f, 0f), new Vector2(28f, 28f));
+                    new Vector2(0f, 1f), new Vector2(i * heartStride, 0f), heartSize);
                 hearts[i] = GetOrAdd<Image>(heart);
-                hearts[i].sprite = square;
+                hearts[i].sprite = hasOnigiri ? onigiri[0] : square;
+                hearts[i].preserveAspect = hasOnigiri;
+                hearts[i].color = Color.white;
             }
 
             // 콤보 (상단 중앙)
@@ -315,7 +325,7 @@ namespace SamuraiRunner.EditorTools
             gameOverText.fontSize = 32;
             gameOverText.alignment = TextAnchor.MiddleCenter;
             gameOverText.color = new Color(0.92f, 0.88f, 0.8f);
-            gameOverText.text = "노검객의 질주가 끝났다\n\nR - 다시 달린다";
+            gameOverText.text = "The Samurai's Run Has Ended\n\nR - Run Again";
             gameOverGO.SetActive(false);
 
             // HUD 컴포넌트 연결
@@ -324,12 +334,36 @@ namespace SamuraiRunner.EditorTools
             hud.comboCounter = systems.GetComponent<ComboCounter>();
             hud.distanceTracker = systems.GetComponent<DistanceTracker>();
             hud.heartIcons = hearts;
+            hud.heartSprites = onigiri;
             hud.comboText = comboText;
             hud.distanceText = distText;
 
             // 게임오버 UI를 게임 흐름에 연결
             var flow = systems.GetComponent<GameFlowController>();
             if (flow != null) flow.gameOverUI = gameOverGO;
+        }
+
+        /// <summary>주먹밥 체력 스프라이트(가득 → 빔 순서)를 불러옵니다. 픽셀아트 설정이 아니면 바로잡습니다.</summary>
+        private static Sprite[] LoadHeartSprites()
+        {
+            if (AssetImporter.GetAtPath(HeartSheetPath) is TextureImporter importer &&
+                (importer.filterMode != FilterMode.Point ||
+                 importer.textureCompression != TextureImporterCompression.Uncompressed))
+            {
+                importer.textureType = TextureImporterType.Sprite;
+                importer.filterMode = FilterMode.Point;
+                importer.textureCompression = TextureImporterCompression.Uncompressed;
+                importer.SaveAndReimport();
+            }
+
+            return AssetDatabase.LoadAllAssetsAtPath(HeartSheetPath)
+                .OfType<Sprite>()
+                .OrderBy(s =>
+                {
+                    int i = s.name.LastIndexOf('_');
+                    return i >= 0 && int.TryParse(s.name.Substring(i + 1), out int n) ? n : 0;
+                })
+                .ToArray();
         }
 
         private static GameObject FindOrCreateUIChild(Transform parent, string name,

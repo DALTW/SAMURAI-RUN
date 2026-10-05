@@ -2,6 +2,7 @@ using UnityEngine;
 using SamuraiRunner.Common;
 using SamuraiRunner.Enemies;
 using SamuraiRunner.Player;
+using SamuraiRunner.Audio;
 
 namespace SamuraiRunner.Combat
 {
@@ -50,6 +51,8 @@ namespace SamuraiRunner.Combat
             direction = dir.normalized;
             owner = shooter;
             ApplyRotation();
+            // 도는 투사체(수리검)는 던지는 소리, 아니면(화살) 활 쏘는 소리
+            Sfx.Play(spinSpeed > 0f ? SfxId.ShurikenThrow : SfxId.BowShot);
         }
 
         private void Awake()

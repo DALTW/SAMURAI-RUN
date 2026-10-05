@@ -27,3 +27,7 @@ sysinfo.txt
 
 # Debug logs
 diag_log.txt
+
+# Tools/ sound and music generators keep their project files; their build output stays out
+!Tools/**/*.csproj
+Tools/**/[Bb]in/

@@ -1,4 +1,5 @@
 using UnityEngine;
+using SamuraiRunner.Audio;
 
 namespace SamuraiRunner.Player
 {
@@ -42,6 +43,8 @@ namespace SamuraiRunner.Player
 
         public bool IsGrounded { get; private set; }
         public bool AutoRun { get => autoRun; set => autoRun = value; }
+        /// <summary>현재 달리기 속도 (유닛/초). SpeedRamp가 달린 거리에 따라 올립니다.</summary>
+        public float RunSpeed { get => runSpeed; set => runSpeed = Mathf.Max(0f, value); }
         public float VerticalVelocity => body.linearVelocity.y;
 
         /// <summary>사망 등으로 달리기를 완전히 멈춥니다 (GameFlowController가 호출).</summary>
@@ -56,6 +59,8 @@ namespace SamuraiRunner.Player
         private PlayerInputReader input;
         private float coyoteTimer;
         private float jumpBufferTimer;
+        private float airTime;
+        private const float MinAirTimeForLandSound = 0.12f; // 아주 짧게 뜬 건 착지 소리 없이
 
         private void Awake()
         {
@@ -80,7 +85,16 @@ namespace SamuraiRunner.Player
 
         private void FixedUpdate()
         {
+            bool wasGrounded = IsGrounded;
             CheckGround();
+
+            // 착지 소리: 잠깐이라도 공중에 떠 있다가 발이 닿은 순간
+            if (IsGrounded)
+            {
+                if (!wasGrounded && airTime > MinAirTimeForLandSound) Sfx.Play(SfxId.Land);
+                airTime = 0f;
+            }
+            else airTime += Time.fixedDeltaTime;
 
             coyoteTimer = IsGrounded ? coyoteTime : coyoteTimer - Time.fixedDeltaTime;
 
@@ -93,6 +107,7 @@ namespace SamuraiRunner.Player
                 jumpBufferTimer = 0f;
                 coyoteTimer = 0f;
                 body.linearVelocity = new Vector2(body.linearVelocity.x, jumpForce);
+                Sfx.Play(SfxId.Jump);
             }
 
             // 낙하 중에는 중력 강화 → 점프가 무겁고 경쾌한 느낌

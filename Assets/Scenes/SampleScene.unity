@@ -154,7 +154,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 700, y: 200}
+  m_SizeDelta: {x: 720, y: 320}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &212296080
 MonoBehaviour:
@@ -189,8 +189,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uB178\uAC80\uAC1D\uC758 \uC9C8\uC8FC\uAC00 \uB05D\uB0AC\uB2E4\n\nR -
-    \uB2E4\uC2DC \uB2EC\uB9B0\uB2E4"
+  m_Text: "The Samurai's Run Has Ended\n\nR - Run Again"
 --- !u!222 &212296081
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -240,8 +239,18 @@ MonoBehaviour:
   - {fileID: 1564290491}
   comboText: {fileID: 966736018}
   distanceText: {fileID: 758220043}
+  heartSprites:
+  - {fileID: 5085652419411129616, guid: 7f584850884144219b6ab1b118b63558, type: 3}
+  - {fileID: 5273551724925987578, guid: 7f584850884144219b6ab1b118b63558, type: 3}
+  - {fileID: 2368587102622314239, guid: 7f584850884144219b6ab1b118b63558, type: 3}
+  - {fileID: 5205195928270666832, guid: 7f584850884144219b6ab1b118b63558, type: 3}
+  - {fileID: 2087787546298346630, guid: 7f584850884144219b6ab1b118b63558, type: 3}
+  heartDrainTime: 0.35
+  healPopScale: 1.3
   heartFullColor: {r: 0.88, g: 0.22, b: 0.28, a: 1}
   heartEmptyColor: {r: 0.25, g: 0.2, b: 0.2, a: 0.6}
+  gameOverText: {fileID: 212296080}
+  gameOverFormat: "The Samurai's Run Has Ended\n\nDistance  {0} m\nMax Combo  {1}\n\nR - Run Again"
 --- !u!114 &216073988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,6 +309,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -511,9 +521,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ComponentVersion: 2
+  m_ComponentVersion: 4
   m_LightType: 4
   m_BlendStyleIndex: 0
+  m_Light2DProvider:
+    rid: -2
+  m_SelectionSources:
+    rid: 6442541429491761228
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
@@ -551,6 +565,19 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 6442541429491761228
+      type: {class: Light2DProviderSources, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data:
+        m_SelectedHashCode: 4
+        m_SelectedSource:
+          rid: -2
+        m_Provider2DCache:
+          rid: -2
 --- !u!4 &619394802
 Transform:
   m_ObjectHideFlags: 0
@@ -577,6 +604,7 @@ GameObject:
   - component: {fileID: 683719707}
   - component: {fileID: 683719706}
   - component: {fileID: 683719705}
+  - component: {fileID: 683719710}
   m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
@@ -632,7 +660,7 @@ BoxCollider2D:
   m_EdgeRadius: 0
 --- !u!212 &683719706
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -689,6 +717,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!4 &683719707
 Transform:
   m_ObjectHideFlags: 0
@@ -704,6 +733,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &683719710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683719704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8295c8c8aa924ff885df23e188cd55ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SamuraiRunner.Environment.GroundGenerator
+  player: {fileID: 1732589464}
+  safeStartDistance: 35
+  groundLengthRange: {x: 14, y: 26}
+  pitWidthRange: {x: 1.6, y: 2.4}
+  pitDepth: 8
+  generateAhead: 30
+  keepBehind: 20
+  scaleSpacingWithSpeed: 1
+  referenceSpeed: 5
+  pitTopColor: {r: 0.08627451, g: 0.07058824, b: 0.13333334, a: 1}
+  pitMidColor: {r: 0.05490196, g: 0.02745098, b: 0.105882354, a: 1}
+  pitBottomColor: {r: 0.03137255, g: 0.015686275, b: 0.05882353, a: 1}
 --- !u!1 &758220042
 GameObject:
   m_ObjectHideFlags: 0
@@ -950,7 +1003,7 @@ MonoBehaviour:
   targetCamera: {fileID: 0}
 --- !u!212 &1097386016
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1007,6 +1060,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &1378324829
 GameObject:
   m_ObjectHideFlags: 0
@@ -1057,7 +1111,7 @@ MonoBehaviour:
   targetCamera: {fileID: 0}
 --- !u!212 &1378324832
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1114,6 +1168,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &1381591226
 GameObject:
   m_ObjectHideFlags: 0
@@ -1153,20 +1208,23 @@ MonoBehaviour:
     spawnY: -1.21875
     startDelay: 2
     enabled: 1
+    allowNearPits: 0
   - name: "\uAD81\uC218"
     prefab: {fileID: 7994265893126446987, guid: e86583a53642f274898ac8959e9af119, type: 3}
     minInterval: 5
     maxInterval: 8
-    spawnY: -1.046875
+    spawnY: -1.5
     startDelay: 12
     enabled: 1
+    allowNearPits: 0
   - name: "\uC218\uB9AC\uAC80 \uB2CC\uC790"
     prefab: {fileID: 3738064507346019397, guid: d74c4c4f57c81a34e92eb718dc57d097, type: 3}
     minInterval: 6
     maxInterval: 9
-    spawnY: -1.109375
+    spawnY: -1.5
     startDelay: 30
     enabled: 1
+    allowNearPits: 0
   - name: "\uC7A5\uC560\uBB3C (\uD1B5\uB098\uBB34)"
     prefab: {fileID: 4176474904518123636, guid: a2ab4e324eefccf49b4ea50292d08990, type: 3}
     minInterval: 4
@@ -1174,6 +1232,7 @@ MonoBehaviour:
     spawnY: -1.28125
     startDelay: 6
     enabled: 1
+    allowNearPits: 0
   - name: "\uC7A5\uC560\uBB3C (\uC8FD\uCC3D)"
     prefab: {fileID: 1785287477930386955, guid: 05861c2516ecc434eb703b2e03894bb3, type: 3}
     minInterval: 5
@@ -1181,6 +1240,21 @@ MonoBehaviour:
     spawnY: -1.078125
     startDelay: 10
     enabled: 1
+    allowNearPits: 0
+  - name: "\uD754\uB4E4\uB9AC\uB294 \uD1B5\uB098\uBB34"
+    prefab: {fileID: 4326566988393192083, guid: c7b644b7a89249e1b3bbdec74eeda8e3, type: 3}
+    minInterval: 7
+    maxInterval: 11
+    spawnY: 3.8
+    startDelay: 20
+    enabled: 1
+    allowNearPits: 0
+  ground: {fileID: 683719710}
+  pitClearance: 3.5
+  minSpawnGap: 3
+  postponeJitter: 0.6
+  scaleGapsWithSpeed: 1
+  referenceSpeed: 5
 --- !u!4 &1381591228
 Transform:
   m_ObjectHideFlags: 0
@@ -1230,8 +1304,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 38, y: 0}
-  m_SizeDelta: {x: 28, y: 28}
+  m_AnchoredPosition: {x: 46, y: 0}
+  m_SizeDelta: {x: 38, y: 34}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1507911690
 CanvasRenderer:
@@ -1261,9 +1335,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1843197933104017171, guid: ca7fa424fa19f36448ce062b8843316c, type: 3}
+  m_Sprite: {fileID: 5085652419411129616, guid: 7f584850884144219b6ab1b118b63558, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1309,9 +1383,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1843197933104017171, guid: ca7fa424fa19f36448ce062b8843316c, type: 3}
+  m_Sprite: {fileID: 5085652419411129616, guid: 7f584850884144219b6ab1b118b63558, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1343,8 +1417,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 76, y: 0}
-  m_SizeDelta: {x: 28, y: 28}
+  m_AnchoredPosition: {x: 92, y: 0}
+  m_SizeDelta: {x: 38, y: 34}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1724982037
 GameObject:
@@ -1634,7 +1708,7 @@ Rigidbody2D:
   m_Constraints: 4
 --- !u!212 &1732589463
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1691,6 +1765,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!4 &1732589464
 Transform:
   m_ObjectHideFlags: 0
@@ -1700,7 +1775,7 @@ Transform:
   m_GameObject: {fileID: 1732589455}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.012, y: -0.41750047, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1722,6 +1797,7 @@ MonoBehaviour:
   invulnerableTime: 1.2
   blinkInterval: 0.1
   spriteRenderer: {fileID: 0}
+  fallDeathY: -3
 --- !u!1 &1781260465
 GameObject:
   m_ObjectHideFlags: 0
@@ -1772,7 +1848,7 @@ MonoBehaviour:
   targetCamera: {fileID: 0}
 --- !u!212 &1781260468
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1829,6 +1905,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &1799828077
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,6 +1920,7 @@ GameObject:
   - component: {fileID: 1799828078}
   - component: {fileID: 1799828081}
   - component: {fileID: 1799828080}
+  - component: {fileID: 1799828084}
   m_Layer: 0
   m_Name: GameSystems
   m_TagString: Untagged
@@ -1944,6 +2022,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1799828084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799828077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ab24dbae924b40beea2f43a45ec95b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SamuraiRunner.Systems.SpeedRamp
+  playerMotor: {fileID: 1732589458}
+  distanceTracker: {fileID: 1799828078}
+  metersPerStep: 50
+  speedPerStep: 0.5
+  maxSpeed: 9
+  acceleration: 2
 --- !u!1 &2019045355
 GameObject:
   m_ObjectHideFlags: 0
@@ -1979,7 +2075,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 28, y: 28}
+  m_SizeDelta: {x: 38, y: 34}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &2019045357
 CanvasRenderer:
@@ -2009,9 +2105,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1843197933104017171, guid: ca7fa424fa19f36448ce062b8843316c, type: 3}
+  m_Sprite: {fileID: 5085652419411129616, guid: 7f584850884144219b6ab1b118b63558, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

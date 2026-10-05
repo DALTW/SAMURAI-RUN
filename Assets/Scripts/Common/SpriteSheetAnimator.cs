@@ -37,6 +37,12 @@ namespace SamuraiRunner.Common
 
         public string CurrentClipName => current != null ? current.clipName : string.Empty;
         public bool IsFinished { get; private set; }
+        /// <summary>현재 재생 중인 프레임 번호(0부터). 발사·판정 타이밍을 특정 프레임에 맞출 때 사용합니다.</summary>
+        public int FrameIndex => frameIndex;
+        /// <summary>현재 클립의 프레임 수 (클립이 없으면 0)</summary>
+        public int FrameCount => current != null && current.frames != null ? current.frames.Length : 0;
+        /// <summary>재생 속도 배율 (1 = 클립 그대로). 달리기 속도가 빨라질 때 다리 움직임을 맞추는 데 사용</summary>
+        public float PlaybackSpeed { get; set; } = 1f;
 
         private SpriteRenderer spriteRenderer;
         private SpriteAnimationClip current;
@@ -64,13 +70,23 @@ namespace SamuraiRunner.Common
         /// <summary>에디터 셋업 스크립트가 클립 목록을 채울 때 사용합니다.</summary>
         public void SetClips(SpriteAnimationClip[] newClips) => clips = newClips;
 
+        /// <summary>해당 이름의 클립이 있고 프레임이 1장 이상인지 (경고 없이 확인만 합니다).</summary>
+        public bool HasClip(string clipName)
+        {
+            if (clips == null) return false;
+            foreach (var clip in clips)
+                if (clip != null && clip.clipName == clipName && clip.frames != null && clip.frames.Length > 0)
+                    return true;
+            return false;
+        }
+
         private void Update()
         {
             if (current == null || IsFinished || current.frames == null || current.frames.Length == 0)
                 return;
 
             float frameTime = 1f / Mathf.Max(1f, current.framesPerSecond);
-            timer += Time.deltaTime;
+            timer += Time.deltaTime * Mathf.Max(0f, PlaybackSpeed);
 
             while (timer >= frameTime)
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using SamuraiRunner.Audio;
 using SamuraiRunner.Common;
 
 namespace SamuraiRunner.Player
@@ -77,6 +78,7 @@ namespace SamuraiRunner.Player
                 attackTimer = 0f;
                 hitThisSwing.Clear();
                 AttackStarted?.Invoke();
+                Sfx.Play(SfxId.Swing);
             }
         }
 
@@ -97,6 +99,7 @@ namespace SamuraiRunner.Player
                     bool isJust = attackTimer <= justParryWindow;
                     parryable.OnParried(gameObject, isJust);
                     ParrySucceeded?.Invoke(isJust, hit.transform.position);
+                    Sfx.Play(isJust ? SfxId.JustParry : SfxId.Parry); // 칼끼리·칼과 화살이 부딪히는 금속음
                 }
             }
         }
